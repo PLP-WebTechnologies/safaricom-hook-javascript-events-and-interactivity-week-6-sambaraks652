@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s;
+        }
+
+        #myModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        #modalOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #errorMessages {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Interactive Webpage with JavaScript</h1>
+
+    <!-- Toggle Background Color Button -->
+    <button onclick="toggleBackgroundColor()">Toggle Background Color</button>
+
+    <br><br>
+
+    <!-- Slider for Text Size -->
+    <label for="textSizeSlider">Adjust Text Size:</label>
+    <input type="range" id="textSizeSlider" min="10" max="50" value="16" oninput="updateTextSize()">
+    <p id="textToResize" style="font-size: 16px;">This is a resizable paragraph. Adjust the slider above.</p>
+
+    <br><br>
+
+    <!-- Modal Button and Modal -->
+    <button onclick="openModal()">Open Modal</button>
+
+    <div id="modalOverlay" onclick="closeModal()"></div>
+    <div id="myModal">
+        <h2>Modal Title</h2>
+        <p>This is a modal window.</p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+
+    <br><br>
+
+    <!-- Form with Validation -->
+    <form id="myForm" onsubmit="return validateForm()">
+        <label for="name">Name (min 3 characters):</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+        <label for="password">Password (min 8 characters, 1 uppercase, 1 number):</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+        <input type="submit" value="Submit">
+        <p id="errorMessages"></p>
+    </form>
+
+    <br><br>
+
+    <!-- Dropdown with Message -->
+    <label for="dropdown">Choose an option:</label>
+    <select id="dropdown" onchange="displayDropdownMessage()">
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+    </select>
+    <p id="dropdownMessage"></p>
+
+    <script>
+        // Toggle Background Color Function
+        function toggleBackgroundColor() {
+            const currentColor = document.body.style.backgroundColor;
+            document.body.style.backgroundColor = (currentColor === 'lightblue') ? 'lightgreen' : 'lightblue';
+        }
+
+        // Slider for Text Size
+        function updateTextSize() {
+            const textSize = document.getElementById('textSizeSlider').value;
+            document.getElementById('textToResize').style.fontSize = textSize + 'px';
+        }
+
+        // Modal Functions
+        function openModal() {
+            document.getElementById('myModal').style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // Form Validation
+        function validateForm() {
+            let errors = [];
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessages = document.getElementById('errorMessages');
+            errorMessages.innerHTML = ''; // Clear previous errors
+
+            // Name validation (min 3 characters)
+            if (name.length < 3) {
+                errors.push('Name must be at least 3 characters long.');
+            }
+
+            // Email validation (valid format)
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!email.match(emailPattern)) {
+                errors.push('Please enter a valid email address.');
+            }
+
+            // Password validation (min 8 characters, 1 uppercase, 1 number)
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if (!password.match(passwordPattern)) {
+                errors.push('Password must be at least 8 characters long, include at least one uppercase letter and one number.');
+            }
+
+            // Display error messages
+            if (errors.length > 0) {
+                errorMessages.innerHTML = errors.join('<br>');
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+
+        // Dropdown message function
+        function displayDropdownMessage() {
+            const dropdown = document.getElementById('dropdown');
+            const message = document.getElementById('dropdownMessage');
+            message.textContent = 'You selected ' + dropdown.options[dropdown.selectedIndex].text;
+        }
+    </script>
+
+</body>
+</html>
